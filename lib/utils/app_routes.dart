@@ -1,16 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:order_tracking/authentication/presentation/screens/authentication_screen.dart';
+import 'package:order_tracking/navigation_screen.dart';
 
 class AppRoutes {
-  static const String splashScreen = '/splash';
-  static const String signIn = '/signIn';
+  static const String navScreen = '/navScreen';
+  static const String authScreen = '/authScreen';
 
   static Map<String, Widget Function(BuildContext)> routes = {};
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case splashScreen:
-      //   return CupertinoPageRoute(builder: (context){});
+      case authScreen:
+        return CupertinoPageRoute(builder: (context){
+          return const AuthenticationScreen();
+        });
+        case navScreen:
+        return CupertinoPageRoute(builder: (context){
+          return const NavigationScreen();
+        });
 
     // Default Route is error route
       default:
