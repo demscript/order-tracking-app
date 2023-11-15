@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:order_tracking/profile_screen.dart';
 import 'package:order_tracking/utils/app_extension.dart';
 
+import 'order/presentation/screens/order_detail_screen.dart';
+
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
 
@@ -17,14 +19,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
     });
   }
 
-  List<Widget> screenOptions =[
-    const Scaffold(),
+  List<Widget> screenOptions = [
+    const OrderDetailScreen(),
     const ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async => false,
+      onWillPop: () async => false,
       child: Scaffold(
         body: screenOptions.elementAt(_selectedIndex),
         bottomNavigationBar: Theme(
@@ -50,11 +52,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
             unselectedFontSize: 0,
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.history),
-                  label: 'Order'),
+                  icon: Icon(Icons.history), label: 'Order'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile'),
+                  icon: Icon(Icons.person), label: 'Profile'),
             ],
           ),
         ),
