@@ -25,10 +25,11 @@ class OrderService {
         "order_id": "1235",
         "order_image":
             "https://media.istockphoto.com/id/623423666/photo/beauty-blond-model-woman-in-evening-red-dress.jpg?s=1024x1024&w=is&k=20&c=0Vs2Hd38fnp5dxRZps0XKDECw0mOMVTT_d9xhfngliI=",
-        "order_date": "2023-11-21",
+        "order_date": "16th Nov. 2023",
         "order_item": "Zara dress",
         "order_quantity": "50",
         "order_price": "50,000",
+        "order_status_time": "10:00AM",
         "order_status": "ORDER PLACED"
       };
 

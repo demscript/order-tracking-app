@@ -8,17 +8,19 @@ class OrderModel {
   String? orderPrice;
   String? orderStatus;
   String? orderImage;
+  String? orderStatusTime;
   TrackingOrderStatus? get statusEnum =>
       getTrackingOrderStatusFromString(orderStatus ?? "");
 
   OrderModel({
-    required this.orderId,
-    required this.orderDate,
-    required this.orderItem,
-    required this.orderQuantity,
-    required this.orderPrice,
-    required this.orderStatus,
-    required this.orderImage,
+    this.orderId,
+    this.orderDate,
+    this.orderItem,
+    this.orderQuantity,
+    this.orderPrice,
+    this.orderStatus,
+    this.orderImage,
+    this.orderStatusTime,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
@@ -28,7 +30,8 @@ class OrderModel {
       orderQuantity: json["order_quantity"],
       orderPrice: json["order_price"],
       orderStatus: json["order_status"],
-      orderImage: json["order_image"]);
+      orderImage: json["order_image"],
+      orderStatusTime: json["order_status_time"]);
 
   Map<String, dynamic> toJson() => {
         "order_id": orderId,
@@ -37,6 +40,7 @@ class OrderModel {
         "order_quantity": orderQuantity,
         "order_price": orderPrice,
         "order_status": orderStatus,
-        "order_image": orderImage
+        "order_image": orderImage,
+        "order_status_time": orderStatusTime
       };
 }

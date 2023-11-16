@@ -12,7 +12,6 @@ dependencies:
   ably_flutter: ^1.2.22
   firebase_core: ^2.14.0
   firebase_auth: ^4.13.0
-  cloud_firestore: ^4.5.3
   google_sign_in: ^6.1.6
   github_sign_in_plus: ^0.0.2
   flutter_riverpod: ^2.3.6
@@ -30,6 +29,7 @@ flutter:
 
  assets:
    - assets/images/
+   - assets/images/screenshots/
 
  fonts:
    - family: Inter

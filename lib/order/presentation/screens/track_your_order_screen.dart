@@ -107,7 +107,7 @@ buildStatusRow(
                 width: context.deviceHeight() / 15,
                 child: FittedBox(
                   child: Text(
-                    orderModel.orderDate ?? "---",
+                    orderModel.orderStatusTime ?? "---",
                     style: context.textTheme.headlineMedium?.copyWith(
                       color: context.themeData.colorScheme.secondary,
                       fontSize: 12,
