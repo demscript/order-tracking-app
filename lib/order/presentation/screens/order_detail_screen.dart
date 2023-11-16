@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:order_tracking/order/presentation/screens/track_your_order_screen.dart';
 import 'package:order_tracking/order/presentation/widget/order_status_track_slide.dart';
 import 'package:order_tracking/utils/app_extension.dart';
 import 'package:order_tracking/utils/app_routes.dart';
 import '../../logic/fetch_order_details_vm.dart';
+import '../../logic/publish_order_vm.dart';
 
 class OrderDetailScreen extends ConsumerStatefulWidget {
   const OrderDetailScreen({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
   @override
   void initState() {
     super.initState();
-    //Future.microtask(() => ref.read(publishOrderVM.notifier).publishOrder());
+    Future.microtask(() => ref.read(publishOrderVM.notifier).publishOrder());
   }
 
   @override
@@ -62,23 +62,24 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                                 ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Track your order",
-                                  style:
-                                      context.textTheme.displayLarge?.copyWith(
-                                    fontSize: 15,
+                            InkWell(
+                              onTap: () => Navigator.pushNamed(context,
+                                  AppRoutes.trackOrderScreen
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Track your order",
+                                    style:
+                                        context.textTheme.displayLarge?.copyWith(
+                                      fontSize: 15,
+                                    ),
                                   ),
-                                ),
-                                InkWell(
-                                    onTap: () => Navigator.pushNamed(context,
-                                      AppRoutes.trackOrderScreen
-                                            ),
-                                    child: const Icon(
-                                        Icons.keyboard_arrow_down_rounded))
-                              ],
+                                  const Icon(
+                                      Icons.keyboard_arrow_down_rounded)
+                                ],
+                              ),
                             ),
                             const SizedBox(
                               height: 15,
@@ -154,17 +155,14 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                                               "₦${data.orderQuantity}",
                                               style: context.textTheme.bodyLarge
                                                   ?.copyWith(
-                                                fontSize: 12,
+                                                fontSize: 15,
                                               ),
                                             ),
                                             Text(data.orderStatus ?? "",
                                                 style: context
-                                                    .textTheme.displayMedium
+                                                    .textTheme.displayLarge
                                                     ?.copyWith(
                                                   fontSize: 12,
-                                                  // color: statusColor(
-                                                  //     e.status ??
-                                                  //         "")),
                                                 ))
                                           ],
                                         )
@@ -185,8 +183,6 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                     child: const Text("No Order Available"));
           },
           error: (e, s) {
-            print(e);
-            print(s);
             return Container(
                 margin: const EdgeInsets.symmetric(vertical: 30),
                 alignment: Alignment.center,

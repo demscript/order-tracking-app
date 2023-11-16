@@ -10,8 +10,8 @@ class GoogleAuthenticationSuccess extends AuthenticationState {
   GoogleAuthenticationSuccess(this.user);
 }
 class GithubAuthenticationSuccess extends AuthenticationState {
-  final String code;
-  GithubAuthenticationSuccess(this.code);
+  final User? user;
+  GithubAuthenticationSuccess(this.user);
 }
 class AuthenticationError extends AuthenticationState {
   final String error;

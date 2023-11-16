@@ -1,9 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_tracking/authentication/data/repository/authentication_service.dart';
 import 'package:order_tracking/authentication/logic/authentication_states.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../data/repository/authentication_service_strings.dart';
 
 class SignInViewModel extends StateNotifier<AuthenticationState> {
   final Ref ref;
@@ -21,18 +19,13 @@ class SignInViewModel extends StateNotifier<AuthenticationState> {
     }
   }
 
-  Future githubSignIn() async {
+  Future githubSignIn(BuildContext context) async {
     state = AuthenticationLoading();
     try {
-      const String url =
-          "https://github.com/login/oauth/authorize?client_id=${AuthenticationServiceString.clientGithubId}&scope=user:email";
-      final uri = Uri.parse(url);
-      await launchUrl(uri);
-      final String code = uri.queryParameters['code'] ?? '';
-      //final response =
-      //   await ref.read(authenticationServiceProvider).githubSignIn();
-      state = GithubAuthenticationSuccess(code);
-      return code;
+      final response =
+        await ref.read(authenticationServiceProvider).githubSignIn(context);
+      state = GithubAuthenticationSuccess(response);
+      return response;
     } catch (e) {
       state = AuthenticationError(e.toString());
     }

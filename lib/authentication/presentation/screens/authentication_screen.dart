@@ -5,8 +5,8 @@ import 'package:order_tracking/authentication/logic/signin_view_model.dart';
 import 'package:order_tracking/authentication/presentation/utils/authentication_strings.dart';
 import 'package:order_tracking/utils/app_extension.dart';
 import 'package:order_tracking/utils/app_routes.dart';
+import 'package:order_tracking/utils/error_snackbar.dart';
 import 'package:order_tracking/utils/svg_render_widget.dart';
-
 import '../../data/model/user_model.dart';
 import '../../logic/profile_view_model.dart';
 
@@ -40,18 +40,20 @@ class AuthenticationScreen extends StatelessWidget {
                         context, AppRoutes.navScreen);
                   }
                   if (next is AuthenticationError) {
-                    print(next.error.toString());
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(errorSnackBar(error: next.error));
                   }
                 });
                 return TextButton(
                   style: TextButton.styleFrom(
-                      minimumSize: const Size(double.maxFinite * 0.25, 20),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          side: BorderSide(
-                            color:
-                                context.themeData.shadowColor.withOpacity(0.3),
-                          ))),
+                    minimumSize: const Size(double.maxFinite * 0.25, 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      side: BorderSide(
+                        color: context.themeData.shadowColor.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
                   onPressed: () {
                     ref.read(signInVM.notifier).googleSignIn();
                   },
@@ -83,7 +85,14 @@ class AuthenticationScreen extends StatelessWidget {
                 final vm = ref.watch(signInVM);
                 ref.listen(signInVM, (previous, next) {
                   if (next is GithubAuthenticationSuccess) {
-                    print("Success Hurray");
+                    final user = UserModel(
+                      userPhoto: next.user?.photoURL,
+                      email: next.user?.email,
+                      fullName: next.user?.displayName,
+                    );
+                    ref.read(profileVM).saveProfileInformation(user: user);
+                    Navigator.pushReplacementNamed(
+                        context, AppRoutes.navScreen);
                   }
                 });
 
@@ -91,7 +100,7 @@ class AuthenticationScreen extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        ref.read(signInVM.notifier).githubSignIn();
+                        ref.read(signInVM.notifier).githubSignIn(context);
                       },
                       style: TextButton.styleFrom(
                           backgroundColor: context.primaryColor,

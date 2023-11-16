@@ -5,6 +5,7 @@ import 'package:order_tracking/order/data/model/order_model.dart';
 
 class OrderService {
   final clientOptions = ably.ClientOptions(
+      clientId: "Cindy",
       key: 'zVOzHA.2ZRJmQ:G55DktnZZe9DLIh-aA10NMlzdg2DurtyzJYLLfK7H6g');
 
   void publishToChannel() async {

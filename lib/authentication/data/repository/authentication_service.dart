@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:github_sign_in_plus/github_sign_in_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:order_tracking/authentication/data/repository/authentication_service_strings.dart';
@@ -28,20 +29,31 @@ class AuthenticationService {
     }
   }
 
-  Future<String> githubSignIn() async {
+  Future<User?> githubSignIn(BuildContext context) async {
+    final GitHubSignIn gitHubSignIn = GitHubSignIn(
+      clientId: AuthenticationServiceString.clientGithubId,
+      clientSecret: AuthenticationServiceString.clientGithubSecret,
+      redirectUrl:
+          "https://order-tracking-d95df.firebaseapp.com/__/auth/handler",
+    );
     try {
-      const String url = "https://github.com/login/oauth/authorize?client_id=${AuthenticationServiceString.clientGithubId}&scope=user:email";
-      final uri = Uri.parse(url);
-      await launchUrl(uri);
-      final String code = uri.queryParameters['code'] ?? '';
-      return code;
-    } catch (e, s) {
-      print(e);
+      UserCredential userCredential;
+      var result = await gitHubSignIn.signIn(context);
+      if (result.status == GitHubSignInResultStatus.ok) {
+        userCredential = await _auth.signInWithCredential(
+            GithubAuthProvider.credential(result.token ?? ""));
+      } else if (result.status == GitHubSignInResultStatus.cancelled) {
+        throw Exception("Please try again later");
+      } else {
+        throw Exception("An error occurred");
+      }
+      return userCredential.user;
+    } catch (e) {
       throw e;
     }
   }
 
-  void signOutGoogle() async{
+  void signOutGoogle() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
   }
@@ -49,6 +61,3 @@ class AuthenticationService {
 
 final authenticationServiceProvider =
     Provider((ref) => AuthenticationService());
-
-
-
