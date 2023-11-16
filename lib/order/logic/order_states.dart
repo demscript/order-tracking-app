@@ -9,7 +9,7 @@ class OrderLoading extends OrderStates {}
 class OrderPublished extends OrderStates {}
 
 class OrderFetched extends OrderStates {
-  final Stream<OrderModel> fetchedOrder;
+  final Stream<OrderModel?> fetchedOrder;
 
   OrderFetched(this.fetchedOrder);
 }

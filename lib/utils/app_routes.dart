@@ -27,10 +27,10 @@ class AppRoutes {
         return CupertinoPageRoute(builder: (context){
           return const OrderDetailScreen();
         });
-        case trackOrderScreen:
-        return CupertinoPageRoute(builder: (context){
-          return const TrackYourOrderScreen();
-        });
+        // case trackOrderScreen:
+        // return CupertinoPageRoute(builder: (context){
+        //   return const TrackYourOrderScreen();
+        // });
 
     // Default Route is error route
       default:

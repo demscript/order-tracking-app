@@ -1,11 +1,15 @@
+import '../../presentation/utils/track_order_enum.dart';
+
 class OrderModel {
-  String orderId;
-  String orderDate;
-  String orderItem;
-  String orderQuantity;
-  String orderPrice;
-  String orderStatus;
-  String orderImage;
+  String? orderId;
+  String? orderDate;
+  String? orderItem;
+  String? orderQuantity;
+  String? orderPrice;
+  String? orderStatus;
+  String? orderImage;
+  TrackingOrderStatus? get statusEnum =>
+      getTrackingOrderStatusFromString(orderStatus ?? "");
 
   OrderModel({
     required this.orderId,

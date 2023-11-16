@@ -9,7 +9,7 @@ class FetchOrderDetailsVM {
 
   AutoDisposeStreamProvider<OrderStates> fetchOrderDetailsStreamProvider() {
     return StreamProvider.autoDispose<OrderStates>((ref) async* {
-      yield OrderLoading();
+      // yield OrderLoading();
       try {
         final response = ref.read(orderServiceProvider).fetchOrderDetails();
         yield OrderFetched(response);
@@ -19,8 +19,9 @@ class FetchOrderDetailsVM {
     });
   }
 }
-  final fetchOrderDetailsVM = StreamProvider((ref) {
-    final streamRep = ref.watch(orderServiceProvider);
+
+final fetchOrderDetailsVM = StreamProvider((ref) {
+  final streamRep = ref.watch(orderServiceProvider);
 
   return streamRep.fetchOrderDetails();
 });
