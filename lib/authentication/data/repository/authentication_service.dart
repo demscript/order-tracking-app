@@ -15,7 +15,7 @@ class AuthenticationService {
       UserCredential userCredential;
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      await googleUser?.authentication;
       final googleAuthCredential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
@@ -23,9 +23,10 @@ class AuthenticationService {
       userCredential = await _auth.signInWithCredential(googleAuthCredential);
       final user = userCredential.user;
       return user;
+
     } catch (e, s) {
       print(e);
-      rethrow;
+      throw "An error occurred";
     }
   }
 
@@ -43,13 +44,14 @@ class AuthenticationService {
         userCredential = await _auth.signInWithCredential(
             GithubAuthProvider.credential(result.token ?? ""));
       } else if (result.status == GitHubSignInResultStatus.cancelled) {
-        throw Exception("Please try again later");
+        throw "Please try again later";
       } else {
-        throw Exception("An error occurred");
+        throw "An error occurred";
       }
       return userCredential.user;
     } catch (e) {
-      throw e;
+      print(e);
+      throw "An error occurred";
     }
   }
 
