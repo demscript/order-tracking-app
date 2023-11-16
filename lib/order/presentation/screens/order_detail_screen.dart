@@ -160,6 +160,9 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                                                 backgroundImage: NetworkImage(
                                                     data.orderImage!),
                                               ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
                                             Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -180,25 +183,32 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                                                 ),
                                               ],
                                             ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                Text(
-                                                  "₦${data.orderQuantity}",
-                                                  style: context
-                                                      .textTheme.bodyLarge
-                                                      ?.copyWith(
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                Text(data.orderStatus ?? "",
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                           Flexible(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "₦${data.orderQuantity}",
                                                     style: context
-                                                        .textTheme.displayLarge
+                                                        .textTheme.bodyLarge
                                                         ?.copyWith(
-                                                      fontSize: 12,
-                                                    ))
-                                              ],
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  FittedBox(
+                                                    child: Text(data.orderStatus ?? "",
+                                                        style: context
+                                                            .textTheme.displayLarge
+                                                            ?.copyWith(
+                                                          fontSize: 12,
+                                                        )),
+                                                  )
+                                                ],
+                                              ),
                                             )
                                           ],
                                         ),

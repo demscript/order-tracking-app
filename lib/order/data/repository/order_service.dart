@@ -40,7 +40,6 @@ class OrderService {
     } catch (e) {
       throw e;
     }
-    await realtime.close();
   }
 
 
