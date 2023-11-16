@@ -7,8 +7,7 @@ import '../../data/model/order_model.dart';
 import '../../logic/fetch_order_details_vm.dart';
 
 class TrackYourOrderScreen extends ConsumerWidget {
-  final OrderModel orderModel;
-  const TrackYourOrderScreen({Key? key, required this.orderModel})
+  const TrackYourOrderScreen({Key? key})
       : super(key: key);
 
   @override
@@ -147,7 +146,7 @@ buildStatusRow(
           }),
           const SizedBox(width: 15),
           Text(
-            widgetStatus.getString ?? "----",
+            widgetStatus.getString,
             style: context.textTheme.titleLarge?.copyWith(fontSize: 10),
           ),
         ],

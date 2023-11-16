@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_tracking/order/presentation/screens/track_your_order_screen.dart';
 import 'package:order_tracking/order/presentation/widget/order_status_track_slide.dart';
 import 'package:order_tracking/utils/app_extension.dart';
+import 'package:order_tracking/utils/app_routes.dart';
 import '../../logic/fetch_order_details_vm.dart';
 
 class OrderDetailScreen extends ConsumerStatefulWidget {
@@ -72,13 +73,9 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
                                   ),
                                 ),
                                 InkWell(
-                                    onTap: () => Navigator.push(context,
-                                            CupertinoPageRoute(
-                                                builder: (context) {
-                                          return TrackYourOrderScreen(
-                                            orderModel: data,
-                                          );
-                                        })),
+                                    onTap: () => Navigator.pushNamed(context,
+                                      AppRoutes.trackOrderScreen
+                                            ),
                                     child: const Icon(
                                         Icons.keyboard_arrow_down_rounded))
                               ],
@@ -199,8 +196,8 @@ class _OrderDetailScreenState extends ConsumerState<OrderDetailScreen> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
+              Padding(
+                 padding: const EdgeInsets.symmetric(vertical: 30),
                   child: CupertinoActivityIndicator(
                     color: context.themeData.shadowColor.withOpacity(0.5),
                   ),
