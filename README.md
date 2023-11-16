@@ -33,11 +33,9 @@ Screen flow/Project Structure:
 
 DOWNLOAD APK:
 
-Gif:
-<img src="assets\images\screenshots\app.gif" width="400">
-
-Images:
+App Demo:
 <p align="center">
+    <img src="assets\images\screenshots\app.gif" width="400">
     <img src="assets\images\screenshots\auth.png" width="400">
     <img src="assets\images\screenshots\detail.png" width="400">
     <img src="assets\images\screenshots\timeline.png" width="400">
