@@ -5,14 +5,13 @@ import 'package:order_tracking/order/presentation/utils/track_order_enum.dart';
 import 'package:order_tracking/utils/app_extension.dart';
 import '../../data/model/order_model.dart';
 import '../../logic/fetch_order_details_vm.dart';
+import '../../logic/order_states.dart';
 
 class TrackYourOrderScreen extends ConsumerWidget {
-  const TrackYourOrderScreen({Key? key})
-      : super(key: key);
+  const TrackYourOrderScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orderDetailsStream = ref.watch(fetchOrderDetailsVM);
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -21,63 +20,69 @@ class TrackYourOrderScreen extends ConsumerWidget {
           style: context.textTheme.headlineLarge,
         ),
       ),
-      body: orderDetailsStream.when(
-        data: (data) {
-          return ListView(
-            shrinkWrap: true,
-            children: [
-              const SizedBox(height: 10),
-              buildStatusRow(
-                  widgetStatus: TrackingOrderStatus.orderPlaced,
-                  selectedStatus: data!.statusEnum!,
-                  orderModel: data,
-                  context: context),
-              buildStatusRow(
-                  widgetStatus: TrackingOrderStatus.orderAccepted,
-                  selectedStatus: data.statusEnum!,
-                  orderModel: data,
-                  context: context),
-              buildStatusRow(
-                  widgetStatus: TrackingOrderStatus.orderPickup,
-                  selectedStatus: data.statusEnum!,
-                  orderModel: data,
-                  context: context),
-              buildStatusRow(
-                  widgetStatus: TrackingOrderStatus.orderOnTheWay,
-                  selectedStatus: data.statusEnum!,
-                  orderModel: data,
-                  context: context),
-              buildStatusRow(
-                  widgetStatus: TrackingOrderStatus.orderArrived,
-                  selectedStatus: data.statusEnum!,
-                  orderModel: data,
-                  context: context),
-              buildStatusRow(
-                  widgetStatus: TrackingOrderStatus.orderDelivered,
-                  selectedStatus: data.statusEnum!,
-                  orderModel: data,
-                  context: context),
-            ],
-          );
-        },
-        error: (e, s) {
-          return Container(
-              margin: const EdgeInsets.symmetric(vertical: 30),
-              alignment: Alignment.center,
-              child: const Text("Sorry An Error Occurred"));
-        },
-        loading: () {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                child: CupertinoActivityIndicator(
-                  color: context.themeData.shadowColor.withOpacity(0.5),
+      body: Builder(
+        builder: (context) {
+          final orderDetailsStream = ref.watch(fetchOrderDetailsStreamVM);
+          if (orderDetailsStream is OrderLoading) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  child: CupertinoActivityIndicator(
+                    color: context.themeData.shadowColor.withOpacity(0.5),
+                  ),
                 ),
-              ),
-            ],
-          );
+              ],
+            );
+          }
+          if (orderDetailsStream is OrderError) {
+            return Container(
+                margin: const EdgeInsets.symmetric(vertical: 30),
+                alignment: Alignment.center,
+                child: const Text("Sorry An Error Occurred"));
+          }
+          if (orderDetailsStream is OrderFetched) {
+            final data = orderDetailsStream.fetchedOrder;
+            return ListView(
+              shrinkWrap: true,
+              children: [
+                const SizedBox(height: 10),
+                buildStatusRow(
+                    widgetStatus: TrackingOrderStatus.orderPlaced,
+                    selectedStatus: data.statusEnum!,
+                    orderModel: data,
+                    context: context),
+                buildStatusRow(
+                    widgetStatus: TrackingOrderStatus.orderAccepted,
+                    selectedStatus: data.statusEnum!,
+                    orderModel: data,
+                    context: context),
+                buildStatusRow(
+                    widgetStatus: TrackingOrderStatus.orderPickup,
+                    selectedStatus: data.statusEnum!,
+                    orderModel: data,
+                    context: context),
+                buildStatusRow(
+                    widgetStatus: TrackingOrderStatus.orderOnTheWay,
+                    selectedStatus: data.statusEnum!,
+                    orderModel: data,
+                    context: context),
+                buildStatusRow(
+                    widgetStatus: TrackingOrderStatus.orderArrived,
+                    selectedStatus: data.statusEnum!,
+                    orderModel: data,
+                    context: context),
+                buildStatusRow(
+                    widgetStatus: TrackingOrderStatus.orderDelivered,
+                    selectedStatus: data.statusEnum!,
+                    orderModel: data,
+                    context: context),
+              ],
+            );
+          }
+
+          return const Text("No Data Found");
         },
       ),
     );

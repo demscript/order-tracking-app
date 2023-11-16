@@ -1,17 +1,25 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:ably_flutter/ably_flutter.dart' as ably;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:order_tracking/order/data/model/order_model.dart';
 
 class OrderService {
-  final clientOptions = ably.ClientOptions(
+  ///converts the data coming from streams from one form to another
+  final streamConverter = StreamTransformer<ably.Message, OrderModel>.fromHandlers(
+    handleData: (message, sink) {
+      final model = OrderModel.fromJson(json.decode(message.data.toString()));
+      sink.add(model);
+    },
+  );
+  static get clientOptions => ably.ClientOptions(
       clientId: "Cindy",
       key: 'zVOzHA.2ZRJmQ:G55DktnZZe9DLIh-aA10NMlzdg2DurtyzJYLLfK7H6g');
+  static ably.Realtime realtime = ably.Realtime(options: clientOptions);
+  final ably.RealtimeChannel orderChannel =
+      realtime.channels.get('order_channel');
 
   void publishToChannel() async {
-    final realtime = ably.Realtime(options: clientOptions);
-    final channel = realtime.channels.get('order_channel');
-
     try {
       Map<String, dynamic> orderData = {
         "order_id": "1235",
@@ -28,31 +36,16 @@ class OrderService {
       final jsonString = jsonEncode(orderData);
 
       // Publish the JSON string data
-      await channel.publish(data: jsonString);
+      await orderChannel.publish(data: jsonString);
     } catch (e) {
       throw e;
     }
     await realtime.close();
   }
 
-  Stream<OrderModel?> fetchOrderDetails() {
-    final realtime = ably.Realtime(options: clientOptions);
-    final channel = realtime.channels.get('order_channel');
-    final orderDataStream = channel.subscribe().map((event) {
-      if (event is ably.Message) {
-        ably.Message message = event as ably.Message;
-        if (message.data is String) {
-          try {
-            Map<String, dynamic> jsonData = json.decode(message.data as String);
-            return OrderModel.fromJson(jsonData);
-          } catch (e) {
-            // Handle JSON decoding error if necessary
-            print('Error decoding JSON: $e');
-          }
-        }
-      }
-    });
-    return orderDataStream;
+
+ Stream<OrderModel> getOrderStream() {
+    return orderChannel.subscribe().transform(streamConverter);
   }
 }
 
