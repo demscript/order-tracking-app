@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:github_sign_in_plus/github_sign_in_plus.dart';
@@ -7,15 +9,21 @@ import 'package:order_tracking/authentication/data/repository/authentication_ser
 
 class AuthenticationService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn =
-      GoogleSignIn(clientId: AuthenticationServiceString.clientOAuthId);
+  GoogleSignIn? _googleSignIn;
 
   Future<User?> googleSignIn() async {
     try {
+      if (Platform.isIOS) {
+        _googleSignIn = GoogleSignIn(
+            clientId: AuthenticationServiceString.clientOAuthIOSId);
+      } else {
+        _googleSignIn =
+            GoogleSignIn(serverClientId: AuthenticationServiceString.clientOAuthId);
+      }
       UserCredential userCredential;
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await _googleSignIn?.signIn();
       final GoogleSignInAuthentication? googleAuth =
-      await googleUser?.authentication;
+          await googleUser?.authentication;
       final googleAuthCredential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
@@ -23,7 +31,6 @@ class AuthenticationService {
       userCredential = await _auth.signInWithCredential(googleAuthCredential);
       final user = userCredential.user;
       return user;
-
     } catch (e, s) {
       print(e);
       throw "An error occurred";
@@ -56,7 +63,14 @@ class AuthenticationService {
   }
 
   void signOutGoogle() async {
-    await _googleSignIn.signOut();
+    if (Platform.isIOS) {
+      _googleSignIn = GoogleSignIn(
+          clientId: AuthenticationServiceString.clientOAuthIOSId);
+    } else {
+      _googleSignIn =
+          GoogleSignIn(serverClientId: AuthenticationServiceString.clientOAuthId);
+    }
+    await _googleSignIn?.signOut();
     await _auth.signOut();
   }
 }
