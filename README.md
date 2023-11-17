@@ -32,6 +32,7 @@ Screen flow/Project Structure:
 - A Track you order screen that shows the current status of the order and it's details.
 
 DOWNLOAD APK:
+<a href='https://drive.google.com/file/d/1r9zfBxYT1tNRO4ucLwNQZzCO5GFKGUBq/view?usp=sharing'> Click to download </a>
 
 App Demo:
 <p align="center">
